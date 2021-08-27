@@ -34,16 +34,18 @@ client.connect(err => {
   bookCollection.createIndex({bookName: "text"});
 
   const orderCollection=client.db(`${process.env.DATABASE_NAME}`).collection("orders")
+  //   console.log('Database Connected')
+  // console.log('connection err', err)
 
   //book management
+
   app.post('/addBook',(req,res)=>{
       const book=req.body;
-      console.log(book)
+      // console.log('new book added', book)
       bookCollection.insertOne(book)
       .then(result=>{
-        console.log(result)
-        // console.log(result.insertedCount);
-        res.send(result.insertedCount)
+        // console.log('inserted count', result.insertedCount)
+        res.send(result.insertedCount > 0)
       })
   })
 
@@ -72,14 +74,16 @@ client.connect(err => {
      })
   })
 
+
   //order management
 
   app.post('/addOrder',(req,res)=>{
     const order=req.body
-    console.log(order)
+    // console.log('new order placed: ', order)
     orderCollection.insertOne(order)
     .then(result=>{
-      res.send(result.insertedCount)
+      // console.log('Order Inserted' , result.insertedCount)
+      res.send(result.insertedCount > 0)
     })
   })
 
@@ -96,5 +100,4 @@ client.connect(err => {
 
 
 
-  
   app.listen(port);
